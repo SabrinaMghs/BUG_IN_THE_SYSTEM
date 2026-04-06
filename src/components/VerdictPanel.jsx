@@ -1,4 +1,4 @@
-export default function RespostaPanel({ puzzle, answer, setAnswer, allFound, onSubmit, wrongAns }) {
+export default function VerdictPanel({ puzzle, answer, setAnswer, allFound, onSubmit, wrongAns }) {
   return (
     <div className="panel">
       <div className="ptitle">▶ VEREDICTO FINAL</div>
