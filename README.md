@@ -1,50 +1,58 @@
-# Welcome to your Expo app 👋
+# 🔍 BugSearch — Caça-Palavras de Mistério em TI
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
-
-## Get started
-
-1. Install dependencies
-
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Como rodar
 
 ```bash
-npm run reset-project
+# 1. Instale as dependências
+npm install
+
+# 2. Rode em modo desenvolvimento
+npm run dev
+
+# 3. Acesse no navegador
+http://localhost:5173
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Estrutura do projeto
 
-## Learn more
+```
+bugsearch/
+├── index.html
+├── package.json
+├── vite.config.js
+└── src/
+    ├── App.jsx                  # Roteamento entre telas
+    ├── main.jsx                 # Entry point
+    ├── styles/
+    │   └── global.css           # Estilos globais
+    ├── data/
+    │   ├── index.js             # Exporta todos os casos
+    │   ├── case1.js             # Caso 1 — Fácil
+    │   ├── case2.js             # Caso 2 — Intermediário
+    │   ├── case3.js             # Caso 3 — Intermediário
+    │   └── case4.js             # Caso 4 — Difícil
+    ├── hooks/
+    │   └── useGame.js           # Lógica do jogo (drag, match)
+    ├── components/
+    │   ├── WordGrid.jsx         # Grade interativa
+    │   ├── ProgressBar.jsx      # Barra de progresso
+    │   ├── WordChips.jsx        # Chips de palavras a encontrar
+    │   ├── ClueList.jsx         # Lista de pistas
+    │   └── VerdictForm.jsx      # Formulário de veredicto
+    └── screens/
+        ├── IntroScreen.jsx      # Tela inicial com seleção de casos
+        ├── GameScreen.jsx       # Tela do jogo
+        └── ResultScreen.jsx     # Tela de resultado
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+## Como adicionar novos casos
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Crie um novo arquivo em `src/data/case5.js` seguindo o mesmo padrão dos outros casos e importe-o em `src/data/index.js`.
 
-## Join the community
+## Como jogar
 
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+1. Escolha um caso na tela inicial
+2. Clique e arraste na grade para marcar palavras (horizontal, vertical ou diagonal)
+3. Encontre todas as palavras da lista
+4. Use as pistas para deduzir o culpado, a linguagem e o local
+5. Submeta o veredicto para fechar o caso!
