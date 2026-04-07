@@ -1,22 +1,3 @@
-// ─── case1.js ───────────────────────────────────────────────
-//
-// Grid 10×10 — palavras em TODAS as direções
-//
-// ┌─────────────┬────────┬─────────────────────────────────────┐
-// │ Palavra     │ Dir.   │ Células (ordem de leitura)           │
-// ├─────────────┼────────┼─────────────────────────────────────┤
-// │ JAVA        │  →     │ r0: c0 c1 c2 c3                     │
-// │ PRODUCTION  │  →     │ r6: c0..c9                          │
-// │ LOGIN       │  →     │ r7: c0..c4                          │
-// │ SABRINA     │  ←     │ r3: c6 c5 c4 c3 c2 c1 c0           │
-// │ BACK        │  ←     │ r4: c5 c4 c3 c2                     │
-// │ TESTING     │  ←     │ r9: c6 c5 c4 c3 c2 c1 c0           │
-// │ USER        │  ↓     │ c9: r0 r1 r2 r3                     │
-// │ DEV         │  ↑     │ c8: r5 r4 r3                        │
-// │ GIT         │  ↘     │ (r0c5)(r1c6)(r2c7)                  │
-// │ FIX         │  ↙     │ (r0c4)(r1c3)(r2c2)                  │
-// └─────────────┴────────┴─────────────────────────────────────┘
-
 const case1 = {
   id: 1,
   difficulty: "FÁCIL",
@@ -71,7 +52,7 @@ const case1 = {
       word: "SABRINA",
       dir: "←",
       label: "horizontal ←",
-      // grid r3: A·N·I·R·B·A·S (c0..c6) — lido c6→c0 = S·A·B·R·I·N·A = SABRINA ✓
+      // grid r3: A·N·I·R·B·A·S (c0..c6) 
       cells: [
         {r:3,c:6},{r:3,c:5},{r:3,c:4},{r:3,c:3},{r:3,c:2},{r:3,c:1},{r:3,c:0},
       ],
@@ -80,7 +61,7 @@ const case1 = {
       word: "BACK",
       dir: "←",
       label: "horizontal ←",
-      // grid r4: K·C·A·B (c2..c5) — lido c5→c2 = B·A·C·K = BACK ✓
+      // grid r4: K·C·A·B (c2..c5) 
       cells: [
         {r:4,c:5},{r:4,c:4},{r:4,c:3},{r:4,c:2},
       ],
@@ -89,7 +70,7 @@ const case1 = {
       word: "TESTING",
       dir: "←",
       label: "horizontal ←",
-      // grid r9: G·N·I·T·S·E·T (c0..c6) — lido c6→c0 = T·E·S·T·I·N·G = TESTING ✓
+      // grid r9: G·N·I·T·S·E·T (c0..c6) 
       cells: [
         {r:9,c:6},{r:9,c:5},{r:9,c:4},{r:9,c:3},{r:9,c:2},{r:9,c:1},{r:9,c:0},
       ],
@@ -111,7 +92,7 @@ const case1 = {
       word: "DEV",
       dir: "↑",
       label: "vertical ↑",
-      // col 8: D(r5)·E(r4)·V(r3) — lido r5→r3 = D·E·V = DEV ✓
+      // col 8: D(r5)·E(r4)·V(r3) 
       cells: [
         {r:5,c:8},{r:4,c:8},{r:3,c:8},
       ],
@@ -153,7 +134,7 @@ const case1 = {
   languages: ["JAVA", "PYTHON", "GO", "RUST"],
   locations: ["BACK", "FRONT", "MOBILE", "DATABASE"],
 
-  culprit: ["ANTHONY", "SABRINA"],
+  culprit: ["SABRINA"],
   language: "JAVA",
   location: "BACK",
 };
