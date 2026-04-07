@@ -133,7 +133,7 @@ const case1 = {
   languages: ["JAVA","PYTHON","GO","RUST"],
   locations: ["BACK","FRONT","MOBILE","DATABASE"],
 
-  culprit: ["SABRINA"],
+  culprit:"SABRINA",
   language: "JAVA",
   location: "BACK",
 };
