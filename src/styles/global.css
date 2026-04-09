@@ -148,7 +148,7 @@ body::after {
 .back {
   background: none;
   border: none;
-  color: #1e3d55;
+  color: #0245ff;
   cursor: pointer;
   font-family: 'Share Tech Mono', monospace;
   font-size: .7rem;
@@ -182,7 +182,7 @@ body::after {
 }
 
 .g-sub {
-  color: #1e3d55;
+  color: #0245ff;
   font-size: .72rem;
   margin-top: .2rem;
 }
@@ -211,7 +211,7 @@ body::after {
   font-family: 'Orbitron', sans-serif;
   font-size: .52rem;
   letter-spacing: 3px;
-  color: #1e3d55;
+  color: #0245ff;
   margin-bottom: .7rem;
   padding-bottom: .35rem;
   border-bottom: 1px solid var(--brd);
@@ -361,7 +361,7 @@ body::after {
   font-family: 'Orbitron', sans-serif;
   font-size: .52rem;
   letter-spacing: 2px;
-  color: #1e3d55;
+  color: #ff0000;
   display: block;
   margin-top: .6rem;
 }
@@ -467,7 +467,7 @@ body::after {
 
 .warn-t {
   font-size: .62rem;
-  color: #1e3d55;
+  color: #0245ff;
   text-align: center;
   margin-top: .35rem;
   line-height: 1.5;
@@ -533,7 +533,7 @@ body::after {
   font-family: 'Orbitron', sans-serif;
   font-size: .52rem;
   letter-spacing: 3px;
-  color: #1e3d55;
+  color: #0245ff;
 }
 
 .res-val {
@@ -541,6 +541,7 @@ body::after {
   font-weight: 700;
   color: var(--y);
   font-size: .9rem;
+  
 }
 
 .btn-row {

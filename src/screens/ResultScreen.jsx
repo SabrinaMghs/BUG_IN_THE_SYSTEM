@@ -3,11 +3,11 @@ import PUZZLES from "../data/index";
 export default function ResultScreen({ puzzle, pidx, onNext, onBack }) {
   return (
     <div className="result">
-      <div style={{ fontFamily: "'Orbitron',sans-serif", fontSize: ".55rem", letterSpacing: "6px", color: "#1e3d55", marginBottom: ".4rem" }}>
+      <div style={{ fontFamily: "'Orbitron',sans-serif", fontSize: ".55rem", letterSpacing: "6px", color: "#0245ff", marginBottom: ".4rem" }}>
         CASO {puzzle.id} · {puzzle.difficulty}
       </div>
       <div className="res-big">CASO FECHADO</div>
-      <div style={{ color: "#1e3d55", letterSpacing: "4px", fontSize: ".6rem", margin: ".4rem 0 1rem", fontFamily: "'Orbitron',sans-serif" }}>
+      <div style={{ color: "#0245ff", letterSpacing: "4px", fontSize: ".6rem", margin: ".4rem 0 1rem", fontFamily: "'Orbitron',sans-serif" }}>
         INVESTIGAÇÃO CONCLUÍDA
       </div>
 
