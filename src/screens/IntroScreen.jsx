@@ -67,6 +67,8 @@ export default function IntroScreen({ onStart, progress, ranking }) {
         </button>
       </div>
 
+  
+
       {/* 🔹 Modal de Ranking */}
       <RankingModal
         isOpen={isRankOpen}
@@ -80,6 +82,7 @@ export default function IntroScreen({ onStart, progress, ranking }) {
           fontSize: ".6rem",
           color: "#0245ff",
           letterSpacing: "3px",
+          marginTop:"20px"
         }}
       >
         ARRASTE NA GRADE PARA MARCAR PALAVRAS · DIAGONAL INCLUÍDA
