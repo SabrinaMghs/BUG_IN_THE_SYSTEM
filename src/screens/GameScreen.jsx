@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import useGame from "../hooks/useGame";
 import WordGrid from "../components/WordGrid";
 import ProgressBar from "../components/ProgressBar";
@@ -11,76 +11,76 @@ import HintButton from "../components/HintButton";
 import ScoreDisplay from "../components/ScoreDisplay";
 import ErrorFeedback from "../components/ErrorFeedback";
 
-// Time limit in seconds per puzzle (tutorial = unlimited)
 const TIME_LIMIT = 180;
 
-export default function GameScreen({ puzzle, onBack, onSolve, onTimeout }) {
+export default function GameScreen({ puzzle, onBack, onSolve, onTimeout, playerStats }) {
   const [answer, setAnswer] = useState({ culprit: "", language: "", location: "" });
   const [wrongAns, setWrongAns] = useState(false);
   const [showHint, setShowHint] = useState(false);
+  const [hintMsg, setHintMsg] = useState(null);
   const [timeLeft, setTimeLeft] = useState(puzzle?.isTutorialOnly ? null : TIME_LIMIT);
   const [timedOut, setTimedOut] = useState(false);
   const [showTutorialOverlay, setShowTutorialOverlay] = useState(puzzle?.isTutorial ?? false);
+  const [startTime] = useState(Date.now());
+  const gameCompleted = useRef(false);
 
   const {
-    foundWords,
-    dragCells,
-    dragging,
-    flash,
-    errorFlash,
-    foundSet,
-    dragSet,
-    allFound,
-    wrongCount,
-    hiddenWordFound,
-    score,
-    hintsUsed,
-    startDrag,
-    moveDrag,
-    endDrag,
-    registerWrongVerdict,
-    useHint
+    foundWords, dragCells, flash, errorFlash,
+    foundSet, dragSet, allFound, wrongCount,
+    hiddenWordFound, score, hintsUsed, wrongAttempts,
+    maxHints, hintsExhausted, progressPct, speedrunSeconds,
+    startDrag, moveDrag, endDrag,
+    registerWrongVerdict, useHint, resetProgress,
   } = useGame(puzzle);
 
-  useEffect(() => {
-    setAnswer({ culprit: "", language: "", location: "" });
-    setWrongAns(false);
-    setShowHint(false);
-    setTimedOut(false);
-    setTimeLeft(puzzle?.isTutorialOnly ? null : TIME_LIMIT);
-    setShowTutorialOverlay(puzzle?.isTutorial ?? false);
-  }, [puzzle?.id]);
-
+  // Timer
   useEffect(() => {
     if (timeLeft === null || timedOut || allFound) return;
-
     if (timeLeft <= 0) {
       setTimedOut(true);
       if (onTimeout) onTimeout();
       return;
     }
-
     const t = setTimeout(() => setTimeLeft(t => t - 1), 1000);
     return () => clearTimeout(t);
   }, [timeLeft, timedOut, allFound, onTimeout]);
 
+  // Auto-complete tutorial
+  useEffect(() => {
+    if (puzzle?.isTutorialOnly && allFound && !gameCompleted.current) {
+      gameCompleted.current = true;
+      setTimeout(() => onSolve(score, hintsUsed, wrongAttempts, TIME_LIMIT - (timeLeft ?? 0)), 1200);
+    }
+  }, [allFound, puzzle?.isTutorialOnly]);
+
+  // Dica automática após 3 erros
   useEffect(() => {
     if (wrongCount >= 3) setShowHint(true);
   }, [wrongCount]);
 
-  useEffect(() => {
-    if (puzzle?.isTutorialOnly && allFound) {
-      setTimeout(() => onSolve(), 1200);
+  function handleHint() {
+    const result = useHint();
+    if (result === "NO_HINTS_LEFT") {
+      setHintMsg("⛔ DICAS ESGOTADAS");
+      setTimeout(() => setHintMsg(null), 1800);
+    } else if (result) {
+      setHintMsg(`💡 ${result}`);
+      setTimeout(() => setHintMsg(null), 1800);
     }
-  }, [allFound, puzzle?.isTutorialOnly, onSolve]);
+  }
 
   function handleSubmit() {
+    if (gameCompleted.current) return;
     if (
       answer.culprit === puzzle.culprit &&
       answer.language === puzzle.language &&
       answer.location === puzzle.location
     ) {
-      onSolve();
+      gameCompleted.current = true;
+      const timeSpent = TIME_LIMIT - (timeLeft ?? 0);
+      const timeBonus = timeLeft ? Math.floor(timeLeft / 10) * 5 : 0;
+      const finalScore = score + timeBonus;
+      onSolve(finalScore, hintsUsed, wrongAttempts, timeSpent, speedrunSeconds);
     } else {
       setWrongAns(true);
       registerWrongVerdict();
@@ -92,11 +92,6 @@ export default function GameScreen({ puzzle, onBack, onSolve, onTimeout }) {
   const secs = timeLeft !== null ? String(timeLeft % 60).padStart(2, "0") : null;
   const timerCritical = timeLeft !== null && timeLeft <= 30;
 
-  const hintClue =
-    showHint && puzzle.clues && !puzzle.isTutorialOnly
-      ? puzzle.clues[Math.min(wrongCount - 3, puzzle.clues.length - 1)]
-      : null;
-
   if (timedOut) {
     return (
       <div className="game">
@@ -105,18 +100,8 @@ export default function GameScreen({ puzzle, onBack, onSolve, onTimeout }) {
           <div className="timeout-title">TEMPO ESGOTADO</div>
           <div className="timeout-sub">O caso ficou sem solução. Os rastros se perderam.</div>
           <div className="btn-row" style={{ marginTop: "1.5rem" }}>
-            <button
-              className="btn2 a"
-              onClick={() => {
-                setTimedOut(false);
-                setTimeLeft(TIME_LIMIT);
-              }}
-            >
-              ↺ TENTAR NOVAMENTE
-            </button>
-            <button className="btn2 b" onClick={onBack}>
-              ← TODOS OS CASOS
-            </button>
+            <button className="btn2 a" onClick={() => window.location.reload()}>↺ TENTAR NOVAMENTE</button>
+            <button className="btn2 b" onClick={onBack}>← TODOS OS CASOS</button>
           </div>
         </div>
       </div>
@@ -125,27 +110,46 @@ export default function GameScreen({ puzzle, onBack, onSolve, onTimeout }) {
 
   return (
     <div className="game">
-      {showTutorialOverlay && (
-        <TutorialOverlay onClose={() => setShowTutorialOverlay(false)} />
-      )}
-
+      {showTutorialOverlay && <TutorialOverlay onClose={() => setShowTutorialOverlay(false)} />}
       {hiddenWordFound && <HiddenWordPopup word={puzzle.hiddenAnswer} />}
 
-      <div className="g-hdr">
-        <button className="back" onClick={onBack}>
-          ← CASOS
-        </button>
-
-        <div
-          className="g-badge"
-          style={{
-            background: puzzle.diffColor + "18",
-            color: puzzle.diffColor,
-            border: `1px solid ${puzzle.diffColor}44`
-          }}
-        >
-          {puzzle.isTutorial ? "" : `CASO ${puzzle.id}`}  {puzzle.difficulty}
+      {/* Notificação de dica */}
+      {hintMsg && (
+        <div style={{
+          position: "fixed", top: "1.5rem", left: "50%", transform: "translateX(-50%)",
+          background: "#0a1520", border: "1px solid var(--y)", color: "var(--y)",
+          fontFamily: "'Orbitron',sans-serif", fontSize: ".65rem", letterSpacing: "2px",
+          padding: ".6rem 1.4rem", zIndex: 999, pointerEvents: "none",
+          boxShadow: "0 0 20px rgba(255,214,0,.2)",
+        }}>
+          {hintMsg}
         </div>
+      )}
+
+      <div className="g-hdr">
+        <button className="back-btn" onClick={onBack}>← CASOS</button>
+
+        <div className="g-badge" style={{
+          background: puzzle.diffColor + "18",
+          color: puzzle.diffColor,
+          border: `1px solid ${puzzle.diffColor}44`,
+        }}>
+          {puzzle.isTutorial ? "TUTORIAL" : `CASO ${puzzle.id}`} • {puzzle.difficulty}
+        </div>
+
+        {/* Indicador de dicas inline no header */}
+        {!puzzle.isTutorial && !puzzle.isTutorialOnly && maxHints > 0 && (
+          <div style={{
+            display: "flex", gap: "4px", alignItems: "center",
+            fontSize: ".5rem", fontFamily: "'Orbitron',sans-serif", color: "#1e3d55",
+          }}>
+            {Array.from({ length: maxHints }).map((_, i) => (
+              <span key={i} style={{ color: i < hintsUsed ? "#1e3d55" : "var(--y)", fontSize: ".8rem" }}>
+                {i < hintsUsed ? "○" : "●"}
+              </span>
+            ))}
+          </div>
+        )}
 
         <div className="g-title">{puzzle.title}</div>
         <div className="g-sub">{puzzle.subtitle}</div>
@@ -159,32 +163,18 @@ export default function GameScreen({ puzzle, onBack, onSolve, onTimeout }) {
 
       <div className="layout">
         <div>
-          <div className="panel" style={{ display: "inline-block" }}>
+          <div className="panel">
             <div className="ptitle">▶ GRADE DE EVIDÊNCIAS</div>
-
-            {puzzle.isTutorial && (
-              <div className="tutorial-arrows">
-                {puzzle.wordList.map(w => (
-                  <span key={w.word} className="tutorial-arrow-badge">
-                    <span className="t-arrow">{w.tutorialHint}</span>
-                    <span className="t-word">{w.word}</span>
-                  </span>
-                ))}
-              </div>
-            )}
-
             <WordGrid
-              puzzle={puzzle}
-              foundSet={foundSet}
-              dragSet={dragSet}
-              flash={flash}
-              errorFlash={errorFlash}
-              startDrag={startDrag}
-              moveDrag={moveDrag}
-              endDrag={endDrag}
+              puzzle={puzzle} foundSet={foundSet} dragSet={dragSet}
+              flash={flash} errorFlash={errorFlash}
+              startDrag={startDrag} moveDrag={moveDrag} endDrag={endDrag}
             />
-
-            <ProgressBar found={foundWords.length} total={puzzle.wordList.length} />
+            <ProgressBar
+              found={foundWords.length}
+              total={puzzle.wordList.filter(w => !w.hidden).length}
+              pct={progressPct}
+            />
             <WordChips wordList={puzzle.wordList} foundWords={foundWords} allFound={allFound} />
           </div>
         </div>
@@ -193,7 +183,12 @@ export default function GameScreen({ puzzle, onBack, onSolve, onTimeout }) {
           {!puzzle.isTutorial && !puzzle.isTutorialOnly && (
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <ScoreDisplay score={score} />
-              <HintButton onHint={useHint} hintsUsed={hintsUsed} disabled={allFound} />
+              <HintButton
+                onHint={handleHint}
+                hintsUsed={hintsUsed}
+                maxHints={maxHints}
+                disabled={allFound}
+              />
             </div>
           )}
 
@@ -201,24 +196,10 @@ export default function GameScreen({ puzzle, onBack, onSolve, onTimeout }) {
 
           <ClueList clues={puzzle.clues} />
 
-          {hintClue && !puzzle.isTutorialOnly && (
-            <div className="hint-box">
-              <div className="hint-title">💡 DICA DO SISTEMA</div>
-              <div className="hint-text">{hintClue}</div>
-              <button className="hint-close" onClick={() => setShowHint(false)}>
-                ✕
-              </button>
-            </div>
-          )}
-
           {!puzzle.isTutorialOnly && (
             <VerdictForm
-              puzzle={puzzle}
-              answer={answer}
-              setAnswer={setAnswer}
-              allFound={allFound}
-              wrongAns={wrongAns}
-              onSubmit={handleSubmit}
+              puzzle={puzzle} answer={answer} setAnswer={setAnswer}
+              allFound={allFound} wrongAns={wrongAns} onSubmit={handleSubmit}
             />
           )}
 
