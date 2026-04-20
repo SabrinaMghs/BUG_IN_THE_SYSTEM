@@ -5,7 +5,7 @@ export default function ResultScreen({ puzzle, pidx, onNext, onBack }) {
 
   return (
     <div className="result">
-      <div style={{ fontFamily: "'Orbitron',sans-serif", fontSize: ".55rem", letterSpacing: "6px", color: "#1e3d55", marginBottom: ".4rem" }}>
+      <div style={{ fontFamily: "'Orbitron',sans-serif", fontSize: ".55rem", letterSpacing: "6px", color: "#a0c8e8", marginBottom: ".4rem" }}>
         {isTutorial ? "TUTORIAL" : `CASO ${puzzle.id} · ${puzzle.difficulty}`}
       </div>
 
@@ -13,7 +13,7 @@ export default function ResultScreen({ puzzle, pidx, onNext, onBack }) {
         {isTutorial ? "TREINAMENTO CONCLUÍDO" : "CASO FECHADO"}
       </div>
 
-      <div style={{ color: "#1e3d55", letterSpacing: "4px", fontSize: ".6rem", margin: ".4rem 0 1rem", fontFamily: "'Orbitron',sans-serif" }}>
+      <div style={{ color: "#a0c8e8", letterSpacing: "4px", fontSize: ".6rem", margin: ".4rem 0 1rem", fontFamily: "'Orbitron',sans-serif" }}>
         {isTutorial ? "VOCÊ ESTÁ PRONTO" : "INVESTIGAÇÃO CONCLUÍDA"}
       </div>
 
