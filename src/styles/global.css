@@ -211,7 +211,7 @@ body::after {
   font-family: 'Orbitron', sans-serif;
   font-size: .52rem;
   letter-spacing: 3px;
-  color: #1e3d55;
+  color: #0245ff;
   margin-bottom: .7rem;
   padding-bottom: .35rem;
   border-bottom: 1px solid var(--brd);
@@ -361,7 +361,7 @@ body::after {
   font-family: 'Orbitron', sans-serif;
   font-size: .52rem;
   letter-spacing: 2px;
-  color: #1e3d55;
+  color: #0245ff;
   display: block;
   margin-top: .6rem;
 }
@@ -467,7 +467,7 @@ body::after {
 
 .warn-t {
   font-size: .62rem;
-  color: #1e3d55;
+  color: #0245ff;
   text-align: center;
   margin-top: .35rem;
   line-height: 1.5;
@@ -533,7 +533,7 @@ body::after {
   font-family: 'Orbitron', sans-serif;
   font-size: .52rem;
   letter-spacing: 3px;
-  color: #1e3d55;
+  color: #a0c8e8;
 }
 
 .res-val {
@@ -894,7 +894,7 @@ body::after {
   font-family: 'Orbitron', sans-serif;
   font-size: .52rem;
   letter-spacing: 3px;
-  color: #1e3d55;
+  color: #a0c8e8;
   margin-bottom: .7rem;
 }
 .res-clue-item {
