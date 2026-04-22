@@ -141,10 +141,73 @@ export default function CreditsModal({ isOpen, onClose }) {
           <div style={{
             height: "1px",
             background: "linear-gradient(90deg, transparent, var(--brd), transparent)",
-            marginBottom: "1rem",
+            marginBottom: "1.2rem",
           }} />
 
-          {/* Rodapé de créditos */}
+          {/* Instituição */}
+          <div style={{
+            border: "1px solid rgba(0,229,255,.15)",
+            background: "rgba(0,229,255,.03)",
+            padding: "1rem",
+            marginBottom: "1.4rem",
+            textAlign: "center",
+          }}>
+            <div style={{
+              fontFamily: "'Orbitron',sans-serif",
+              fontSize: ".42rem",
+              letterSpacing: "4px",
+              color: "#1e3d55",
+              marginBottom: ".5rem",
+            }}>
+              INSTITUIÇÃO DE ENSINO
+            </div>
+
+            <div style={{
+              fontFamily: "'Orbitron',sans-serif",
+              fontWeight: 700,
+              fontSize: ".85rem",
+              color: "var(--c)",
+              letterSpacing: "2px",
+              marginBottom: ".3rem",
+            }}>
+              SENAC
+            </div>
+
+            <div style={{
+              fontFamily: "'Share Tech Mono',monospace",
+              fontSize: ".68rem",
+              color: "#a0c8e8",
+              marginBottom: ".6rem",
+              letterSpacing: "1px",
+            }}>
+              Serra Talhada — PE
+            </div>
+
+            <div style={{
+              display: "inline-block",
+              fontFamily: "'Share Tech Mono',monospace",
+              fontSize: ".58rem",
+              color: "#2d5a7a",
+              border: "1px solid var(--brd)",
+              padding: "3px 10px",
+              letterSpacing: "1px",
+              marginBottom: ".6rem",
+            }}>
+              TÉCNICO EM DESENVOLVIMENTO DE SISTEMAS
+            </div>
+
+            <div style={{
+              fontFamily: "'Share Tech Mono',monospace",
+              fontSize: ".6rem",
+              color: "#5a8aaa",
+              lineHeight: 1.8,
+            }}>
+              <span style={{ color: "#2d5a7a", fontFamily: "'Orbitron',sans-serif", fontSize: ".42rem", letterSpacing: "2px" }}>ORIENTADOR</span><br />
+              <span style={{ color: "#c9e8ff", fontSize: ".72rem" }}>Prof. Tobias Alves</span>
+            </div>
+          </div>
+
+          {/* Rodapé técnico */}
           <div style={{
             textAlign: "center",
             fontFamily: "'Share Tech Mono',monospace",
@@ -153,8 +216,8 @@ export default function CreditsModal({ isOpen, onClose }) {
             lineHeight: 1.8,
             marginBottom: "1.4rem",
           }}>
-            <span style={{ color: "#2d5a7a" }}>ENGINE</span> · React + Vite<br />
-            <span style={{ color: "#2d5a7a" }}>FONTES</span> · Orbitron · Share Tech Mono<br />
+            <span style={{ color: "#2d5a7a" }}>ENGINE</span> · React + Vite &nbsp;·&nbsp;
+            <span style={{ color: "#2d5a7a" }}>FONTES</span> · Orbitron · Share Tech Mono &nbsp;·&nbsp;
             <span style={{ color: "#2d5a7a" }}>ANO</span> · 2025
           </div>
 

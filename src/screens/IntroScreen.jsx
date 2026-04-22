@@ -4,7 +4,7 @@ import RankingModal from "../components/RankingModal";
 import CreditsModal from "../components/CreditsModal";
 
 export default function IntroScreen({ onStart, progress, ranking }) {
-  const [isRankOpen, setIsRankOpen]       = useState(false);
+  const [isRankOpen, setIsRankOpen] = useState(false);
   const [isCreditsOpen, setIsCreditsOpen] = useState(false);
 
   return (
@@ -81,7 +81,7 @@ export default function IntroScreen({ onStart, progress, ranking }) {
       />
 
       {/* Rodapé */}
-      <div style={{ fontSize: ".6rem", color: "#0245ff", letterSpacing: "3px" }}>
+      <div className="footer-tip">
         ARRASTE NA GRADE PARA MARCAR PALAVRAS · DIAGONAL INCLUÍDA
       </div>
     </div>
