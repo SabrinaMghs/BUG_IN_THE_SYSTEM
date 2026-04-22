@@ -10,6 +10,7 @@ import HiddenWordPopup from "../components/HiddenWordPopup";
 import HintButton from "../components/HintButton";
 import ScoreDisplay from "../components/ScoreDisplay";
 import ErrorFeedback from "../components/ErrorFeedback";
+import TimeoutScreen from "./TimeoutScreen";
 
 const TIME_LIMIT = 180;
 
@@ -92,22 +93,20 @@ export default function GameScreen({ puzzle, onBack, onSolve, onTimeout, playerS
   const secs = timeLeft !== null ? String(timeLeft % 60).padStart(2, "0") : null;
   const timerCritical = timeLeft !== null && timeLeft <= 30;
 
-  if (timedOut) {
-    return (
-      <div className="game">
-        <div className="timeout-screen">
-          <div className="timeout-icon">⏱</div>
-          <div className="timeout-title">TEMPO ESGOTADO</div>
-          <div className="timeout-sub">O caso ficou sem solução. Os rastros se perderam.</div>
-          <div className="btn-row" style={{ marginTop: "1.5rem" }}>
-            <button className="btn2 a" onClick={() => window.location.reload()}>↺ TENTAR NOVAMENTE</button>
-            <button className="btn2 b" onClick={onBack}>← TODOS OS CASOS</button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
+if (timedOut) {
+  return (
+    <TimeoutScreen
+      puzzle={puzzle}
+      foundWords={foundWords}
+      onRetry={() => {
+        resetProgress();     
+        setTimeLeft(TIME_LIMIT);
+        setTimedOut(false);
+      }}
+      onBack={onBack}
+    />
+  );
+}
   return (
     <div className="game">
       {showTutorialOverlay && <TutorialOverlay onClose={() => setShowTutorialOverlay(false)} />}

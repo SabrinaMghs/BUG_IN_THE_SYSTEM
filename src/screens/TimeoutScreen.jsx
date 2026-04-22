@@ -6,13 +6,17 @@ export default function TimeoutScreen({ puzzle, foundWords = [], onRetry, onBack
   const [glitch, setGlitch] = useState(false);
 
   useEffect(() => {
-    const t1 = setTimeout(() => setVisible(true), 80);
-    const iv = setInterval(() => {
-      setGlitch(true);
-      setTimeout(() => setGlitch(false), 160);
-    }, 3000);
-    return () => { clearTimeout(t1); clearInterval(iv); };
-  }, []);
+  const t1 = setTimeout(() => setVisible(true), 80);
+  const iv = setInterval(() => {
+    setGlitch(true);
+    setTimeout(() => setGlitch(false), 160);
+  }, 3000);
+
+  return () => {
+    clearTimeout(t1);
+    clearInterval(iv);
+  };
+}, []);
 
   const totalWords = puzzle?.wordList?.filter(w => !w.hidden).length ?? 0;
   const found = foundWords.filter(w => {
