@@ -2,6 +2,9 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; 
+  padding: 1.5rem;
 }
 
 .logo {
@@ -84,6 +87,12 @@
   letter-spacing: 2px;
   margin-top: .8rem;
 }
+.menu-buttons {
+  margin-top: 2rem;   
+  transform: translateY(-40px); 
+  display: flex;
+  gap: 1rem;
+}
 .footer-tip {
   margin-top: auto;
   margin-bottom: 20px;
@@ -91,8 +100,4 @@
   color: #0245ff;
   letter-spacing: 3px;
   text-align: center;
-}
-
-.menu-buttons {
-  margin-bottom: 100px;
 }

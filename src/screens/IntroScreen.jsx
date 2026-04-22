@@ -50,12 +50,12 @@ export default function IntroScreen({ onStart, progress, ranking }) {
       </div>
 
       {/* Barra de ações */}
-      <div className="actions-bar intro-actions" style={{ display: "flex", gap: ".75rem", flexWrap: "wrap", justifyContent: "center" }}>
+      <div className="actions-bar intro-actions" style={{ display: "flex", gap: ".75rem",flexWrap: "wrap", justifyContent: "flex-start", transform: "translateY(-15px)" }}>
         <button
           className="btn-ranking btn-ranking-main"
           onClick={() => setIsRankOpen(true)}
         >
-          <span className="icon">📊</span> VER RANKING GLOBAL
+          <span className="icon">📊</span> RANKING GLOBAL
         </button>
 
         <button
