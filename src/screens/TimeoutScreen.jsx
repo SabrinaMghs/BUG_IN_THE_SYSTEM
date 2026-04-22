@@ -1,128 +1,92 @@
 import { useEffect, useState } from "react";
 import "./TimeoutScreen.css";
 
-export default function TimeoutScreen({ puzzle, onRetry, onBack }) {
+export default function TimeoutScreen({ puzzle, foundWords = [], onRetry, onBack }) {
   const [visible, setVisible] = useState(false);
-  const [glitchActive, setGlitchActive] = useState(false);
+  const [glitch, setGlitch] = useState(false);
 
   useEffect(() => {
-    // Entrada com delay dramático
-    const t1 = setTimeout(() => setVisible(true), 100);
-
-    // Glitch loop
-    const glitch = setInterval(() => {
-      setGlitchActive(true);
-      setTimeout(() => setGlitchActive(false), 150);
-    }, 2800);
-
-    return () => {
-      clearTimeout(t1);
-      clearInterval(glitch);
-    };
+    const t1 = setTimeout(() => setVisible(true), 80);
+    const iv = setInterval(() => {
+      setGlitch(true);
+      setTimeout(() => setGlitch(false), 160);
+    }, 3000);
+    return () => { clearTimeout(t1); clearInterval(iv); };
   }, []);
 
-  const wordsFound = puzzle?.wordList?.filter(w => !w.hidden).length ?? 0;
+  const totalWords = puzzle?.wordList?.filter(w => !w.hidden).length ?? 0;
+  const found = foundWords.filter(w => {
+    const e = puzzle?.wordList?.find(x => x.word === w);
+    return e && !e.hidden;
+  }).length;
 
   return (
-    <div className={`timeout-screen ${visible ? "visible" : ""}`}>
-      {/* Scanlines overlay */}
-      <div className="timeout-scanlines" />
+    <div className={`to-screen${visible ? " to-visible" : ""}`}>
+      <div className="to-scanlines" />
+      <div className="to-gridbg" />
+      {glitch && <div className="to-glitch-bar" />}
 
-      {/* Background grid */}
-      <div className="timeout-grid-bg" />
+      <div className="to-body">
 
-      {/* Glitch overlay */}
-      {glitchActive && <div className="timeout-glitch-overlay" />}
-
-      <div className="timeout-content">
-
-        {/* Ícone de alerta animado */}
-        <div className="timeout-icon-wrap">
-          <div className="timeout-ring timeout-ring-1" />
-          <div className="timeout-ring timeout-ring-2" />
-          <div className="timeout-icon-inner">⏱</div>
+        <div className="to-icon-wrap">
+          <div className="to-ring to-ring-a" />
+          <div className="to-ring to-ring-b" />
+          <div className="to-emoji">⏱</div>
         </div>
 
-        {/* Código de erro estilo terminal */}
-        <div className="timeout-code">
-          <span className="timeout-code-prefix">ERR_</span>
-          <span className={`timeout-code-main ${glitchActive ? "glitch" : ""}`}>TIMEOUT_042</span>
+        <div className="to-errcode">
+          <span className="to-errpre">SYS::</span>
+          <span className={`to-errmain${glitch ? " to-glitch" : ""}`}>TIMEOUT_042</span>
         </div>
 
-        {/* Título principal */}
-        <div className={`timeout-title ${glitchActive ? "glitch" : ""}`}>
-          TEMPO ESGOTADO
+        <h1 className={`to-title${glitch ? " to-glitch" : ""}`}>TEMPO ESGOTADO</h1>
+
+        <div className="to-line" />
+
+        <div className="to-narrative">
+          {[
+            "O prazo de investigação expirou.",
+            "O suspeito apagou os rastros e desapareceu.",
+            "O caso foi arquivado sem solução.",
+          ].map((txt, i) => (
+            <p key={i} className="to-nline" style={{ animationDelay: `${0.3 + i * 0.3}s` }}>
+              <span className="to-arrow">▶</span>{txt}
+            </p>
+          ))}
         </div>
 
-        <div className="timeout-divider" />
-
-        {/* Mensagem narrativa */}
-        <div className="timeout-narrative">
-          <p className="timeout-narrative-line">
-            <span className="timeout-prompt">▶</span>
-            O prazo de investigação expirou.
-          </p>
-          <p className="timeout-narrative-line">
-            <span className="timeout-prompt">▶</span>
-            O suspeito apagou os rastros e desapareceu.
-          </p>
-          <p className="timeout-narrative-line timeout-narrative-fade">
-            <span className="timeout-prompt">▶</span>
-            O caso foi arquivado sem solução.
-          </p>
-        </div>
-
-        {/* Info do caso */}
         {puzzle && (
-          <div className="timeout-case-info">
-            <div className="timeout-case-row">
-              <span className="timeout-case-label">CASO</span>
-              <span className="timeout-case-value">
-                {puzzle.isTutorial ? "TUTORIAL" : `#${puzzle.id} — ${puzzle.title}`}
-              </span>
-            </div>
-            <div className="timeout-case-row">
-              <span className="timeout-case-label">DIFICULDADE</span>
-              <span className="timeout-case-value" style={{ color: puzzle.diffColor }}>
-                {puzzle.difficulty}
-              </span>
-            </div>
-            <div className="timeout-case-row">
-              <span className="timeout-case-label">STATUS</span>
-              <span className="timeout-case-value timeout-status-fail">
-                ✘ NÃO SOLUCIONADO
-              </span>
-            </div>
+          <div className="to-card">
+            <ToRow label="CASO" value={puzzle.isTutorial ? "TUTORIAL" : `#${puzzle.id} — ${puzzle.title}`} />
+            <ToRow label="DIFICULDADE" value={puzzle.difficulty} vc={puzzle.diffColor} />
+            <ToRow label="PROGRESSO" value={`${found} / ${totalWords} PALAVRAS`} />
+            <ToRow label="STATUS" value="✘ NÃO SOLUCIONADO" vc="var(--r)" />
           </div>
         )}
 
-        {/* Dica motivacional */}
-        <div className="timeout-tip">
-          <span className="timeout-tip-icon">💡</span>
-          <span className="timeout-tip-text">
-            DICA: Encontre todas as palavras-chave antes de submeter o veredito.
-          </span>
+        <div className="to-tip">
+          <span>💡</span>
+          <span>DICA: Marque as palavras-chave na grade antes de submeter o veredicto.</span>
         </div>
 
-        {/* Botões */}
-        <div className="timeout-btn-row">
-          <button className="timeout-btn timeout-btn-primary" onClick={onRetry}>
-            <span className="timeout-btn-icon">↺</span>
-            TENTAR NOVAMENTE
-          </button>
-          <button className="timeout-btn timeout-btn-secondary" onClick={onBack}>
-            <span className="timeout-btn-icon">←</span>
-            TODOS OS CASOS
-          </button>
+        <div className="to-btns">
+          <button className="to-btn to-btn-red" onClick={onRetry}>↺ TENTAR NOVAMENTE</button>
+          <button className="to-btn to-btn-dim" onClick={onBack}>← TODOS OS CASOS</button>
         </div>
 
-        {/* Rodapé de sistema */}
-        <div className="timeout-footer">
-          <span className="timeout-footer-dot" />
-          SISTEMA BUG_IN_THE_SYSTEM v2.0 — SESSÃO ENCERRADA
-          <span className="timeout-footer-dot" />
+        <div className="to-footer">
+          <span className="to-dot" />BUG_IN_THE_SYSTEM — SESSÃO ENCERRADA<span className="to-dot" />
         </div>
       </div>
+    </div>
+  );
+}
+
+function ToRow({ label, value, vc }) {
+  return (
+    <div className="to-card-row">
+      <span className="to-card-label">{label}</span>
+      <span className="to-card-value" style={vc ? { color: vc } : {}}>{value}</span>
     </div>
   );
 }
