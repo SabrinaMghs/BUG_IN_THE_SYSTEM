@@ -2,11 +2,11 @@ import { useState } from "react";
 
 const CREATORS = [
 { name: "Anthony Matheus" },
-{ name: "Emerson de Melo Silva" },
+{ name: "Emerson de Melo" },
 { name: "George Rufino"}, 
 { name: "Isabelle Andrade" },
 { name: "Klayverton Emerson" },
-{ name: "Sabrina de Lima Magalhães" },
+{ name: "Sabrina de Lima" },
 { name: "Thyago Felipe" },
 ];
 
